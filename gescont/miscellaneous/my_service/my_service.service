@@ -1,0 +1,16 @@
+#sudo nano /etc/systemd/system/my_service.service
+
+[Unit]
+Description=My Custom Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/my_service_script.py
+Restart=always
+User=root
+Group=root
+StandardOutput=append:/var/log/my_service.log
+StandardError=append:/var/log/my_service_error.log
+
+[Install]
+WantedBy=multi-user.target

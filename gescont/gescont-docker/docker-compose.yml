@@ -1,0 +1,43 @@
+services:
+  docker-django-api:
+    restart: "no"
+    #the folther where the django project source code is,
+    #along as a file called Docker file, with the docker image
+    #generation details
+    build: ./gescont_docker_djangoapi
+    #the name of the future image
+    image: docker-django-api:1
+    #the command to start the service.
+    #   - for develop mode:
+    #     python manage.py runserver 0.0.0.0:8000
+    #   - for production mode:
+    #     gunicorn metatierrascol.wsgi:application --bind 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      #the source code folder: the source code folder inside the docker 
+      #container. It is always the same path
+      - ./gescont_docker_djangoapi:/usr/src/app
+      #shared folder to put images, etc. Not needed in this example
+      - ./gescont_docker_djangoapi/media_root:/usr/src/media_root
+      #shared folder to put html, css, etc. Not needed in this example
+      - ./gescont_docker_djangoapi/static_root/:/usr/src/static_root
+    ports:
+      #the port for the service
+      - ${DEVELOP_DOCKER_DJANGO_API_FORWARDED_PORT}:8000
+    env_file:
+      #the env file for the service port
+      - .env
+      #the env file for the Django configuration
+      - .env.dev
+    networks:
+      #the network to include this service
+      - postgis_postgis
+
+networks:
+  #indicates, the network to include this service, is an external
+  #network created by an external service. The postgis service must be
+  #started before to start this service, and the database also must be
+  #has been created previously.
+   postgis_postgis:
+      driver: bridge
+      external: true
