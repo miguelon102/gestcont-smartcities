@@ -1,13 +1,3 @@
-# Contraseñas y variables de entorno
-.env
-.env.*
-*.env
-
-# Carpetas pesadas de Node/Angular
-node_modules/
-dist/
-.angular/
-
 # Caché de Python/Django
 __pycache__/
 *.pyc
